@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Bingo Board Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .bingo-board-container {
+            margin-bottom: 20px;
+        }
+        .bingo-board {
+            display: grid;
+            grid-template-columns: repeat(5, 8vw);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .bingo-cell {
+            width: 8vw;
+            height: 8vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            overflow: hidden;
+            font-size: 1vw;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Custom Bingo Board Generator</h2>
+<div id="bingoBoardContainer" class="bingo-board-container">
+    <!-- Generated bingo boards will appear here -->
+</div>
+<button id="createBoardButton">Create Board for New User</button>
+
+<script>
+    const customValues = [
+        "A quick brown fox", "Better late than never", "Can't judge a book by its cover",
+        "Doing nothing is hard", "Every cloud has a silver lining", "Failure is the stepping stone",
+        "Good things come to those who wait", "Honesty is the best policy", "If at first you don't succeed",
+        "Just do it", "Knowledge is power", "Love for all, hatred for none",
+        "Money doesn't bring happiness", "Never look a gift horse in the mouth", "Opportunities don't happen",
+        "Practice makes perfect", "Quality is not an act", "Rome wasn't built in a day",
+        "Seeing is believing", "Time is money", "Unity is strength",
+        "Variety is the spice of life", "Well begun is half done", "Xerox and Werox", "You can't make an omelet"
+    ];
+
+    document.getElementById('createBoardButton').addEventListener('click', function() {
+        const boardContainer = document.getElementById('bingoBoardContainer');
+        const newBoard = generateBingoBoard();
+        boardContainer.innerHTML = ''; // Clear previous board
+        boardContainer.appendChild(newBoard);
+    });
+
+    function generateBingoBoard() {
+        const board = document.createElement('div');
+        board.className = 'bingo-board';
+        const shuffledValues = shuffleArray([...customValues]);
+
+        shuffledValues.forEach(value => {
+            const cell = document.createElement('div');
+            cell.className = 'bingo-cell';
+            cell.textContent = value;
+            board.appendChild(cell);
+        });
+
+        return board;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
+        return array;
+    }
+</script>
+
+</body>
+</html>
