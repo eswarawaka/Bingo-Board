@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Bingo Board Generator</title>
+    <title>Bingo Board</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,84 +14,75 @@
             height: 100vh;
             background-color: #f0f0f0;
         }
-        .bingo-board-container {
-            margin-bottom: 20px;
-        }
         .bingo-board {
             display: grid;
-            grid-template-columns: repeat(5, 8vw);
-            gap: 8px;
-            margin-bottom: 10px;
+            grid-template-columns: repeat(15, 2em);
+            gap: 4px;
+            margin-bottom: 20px;
         }
-        .bingo-cell {
-            width: 8vw;
-            height: 8vw;
+        .bingo-number {
+            width: 2em;
+            height: 2em;
             display: flex;
-            align-items: center;
             justify-content: center;
-            text-align: center;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            overflow: hidden;
-            font-size: 1vw;
+            align-items: center;
+            background-color: #ddd;
+            border-radius: 4px;
+        }
+        .highlighted {
+            background-color: #4CAF50;
+            color: white;
         }
         button {
             padding: 10px 20px;
-            font-size: 14px;
+            font-size: 1em;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<h2>Custom Bingo Board Generator</h2>
-<div id="bingoBoardContainer" class="bingo-board-container">
-    <!-- Generated bingo boards will appear here -->
+<h2>Bingo Board</h2>
+<div id="bingoBoard" class="bingo-board">
+    <!-- Bingo numbers will be generated here -->
 </div>
-<button id="createBoardButton">Create Board for New User</button>
+<button id="generateButton">Generate Random Number</button>
+<div id="completionMessage"></div>
 
 <script>
-    const customValues = [
-        "A quick brown fox", "Better late than never", "Can't judge a book by its cover",
-        "Doing nothing is hard", "Every cloud has a silver lining", "Failure is the stepping stone",
-        "Good things come to those who wait", "Honesty is the best policy", "If at first you don't succeed",
-        "Just do it", "Knowledge is power", "Love for all, hatred for none",
-        "Money doesn't bring happiness", "Never look a gift horse in the mouth", "Opportunities don't happen",
-        "Practice makes perfect", "Quality is not an act", "Rome wasn't built in a day",
-        "Seeing is believing", "Time is money", "Unity is strength",
-        "Variety is the spice of life", "Well begun is half done", "Xerox and Werox", "You can't make an omelet"
-    ];
+    const bingoBoard = document.getElementById('bingoBoard');
+    const generateButton = document.getElementById('generateButton');
+    const completionMessage = document.getElementById('completionMessage');
+    let generatedNumbers = [];
 
-    document.getElementById('createBoardButton').addEventListener('click', function() {
-        const boardContainer = document.getElementById('bingoBoardContainer');
-        const newBoard = generateBingoBoard();
-        boardContainer.innerHTML = ''; // Clear previous board
-        boardContainer.appendChild(newBoard);
-    });
-
-    function generateBingoBoard() {
-        const board = document.createElement('div');
-        board.className = 'bingo-board';
-        const shuffledValues = shuffleArray([...customValues]);
-
-        shuffledValues.forEach(value => {
-            const cell = document.createElement('div');
-            cell.className = 'bingo-cell';
-            cell.textContent = value;
-            board.appendChild(cell);
-        });
-
-        return board;
+    // Populate the bingo board with numbers 1 to 75
+    for (let i = 1; i <= 75; i++) {
+        const numberElement = document.createElement('div');
+        numberElement.textContent = i;
+        numberElement.classList.add('bingo-number');
+        numberElement.id = `number-${i}`;
+        bingoBoard.appendChild(numberElement);
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    generateButton.addEventListener('click', () => {
+        if (generatedNumbers.length >= 75) {
+            alert("All numbers have been generated!");
+            return;
         }
-        return array;
-    }
+
+        let randomNumber;
+        do {
+            randomNumber = Math.floor(Math.random() * 75) + 1;
+        } while (generatedNumbers.includes(randomNumber));
+
+        generatedNumbers.push(randomNumber);
+        document.getElementById(`number-${randomNumber}`).classList.add('highlighted');
+
+        if (generatedNumbers.length === 75) {
+            generateButton.disabled = true; // Disable button after all numbers are generated
+            completionMessage.textContent = "All 75 numbers have been generated!";
+        }
+    });
 </script>
 
 </body>
